@@ -36,9 +36,9 @@ function Create() {
     setError("");
     try {
       const formData = new FormData();
-      formData.append("media", file);
-      formData.append("mediaType", mediaType); // ✅ always append
-      if (caption) formData.append("caption", caption);
+      formData.append("mediaType", mediaType)
+      if (caption) formData.append("caption", caption)
+      formData.append("media", file)
 
       if (tab === "post") {
         await dispatch(uploadPost(formData)).unwrap();
