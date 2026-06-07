@@ -30,31 +30,57 @@ function Create() {
     setPreview(URL.createObjectURL(f));
   };
 
+  // const handleSubmit = async () => {
+  //   if (!file) return setError("Please select a media file");
+  //   setLoading(true);
+  //   setError("");
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("mediaType", mediaType)
+  //     if (caption) formData.append("caption", caption)
+  //     formData.append("media", file)
+
+  //     if (tab === "post") {
+  //       await dispatch(uploadPost(formData)).unwrap();
+  //     } else if (tab === "loop") {
+  //       await uploadLoopApi(formData);
+  //     } else {
+  //       await uploadStoryApi(formData);
+  //     }
+
+  //     navigate(tab === "loop" ? "/loops" : "/");
+  //   } catch (error) {
+  //     setError(error?.message || "Upload failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async () => {
-    if (!file) return setError("Please select a media file");
-    setLoading(true);
-    setError("");
+    if (!file) return setError("Please select a media file")
+    setLoading(true)
+    setError("")
     try {
-      const formData = new FormData();
-      formData.append("mediaType", mediaType)
+      const formData = new FormData()
+      formData.append("mediaType", mediaType)  // ← text fields first ✅
       if (caption) formData.append("caption", caption)
-      formData.append("media", file)
+      formData.append("media", file)           // ← file last ✅
 
       if (tab === "post") {
-        await dispatch(uploadPost(formData)).unwrap();
+        await dispatch(uploadPost(formData)).unwrap()
       } else if (tab === "loop") {
-        await uploadLoopApi(formData);
+        await uploadLoopApi(formData)
       } else {
-        await uploadStoryApi(formData);
+        await uploadStoryApi(formData)
       }
 
-      navigate(tab === "loop" ? "/loops" : "/");
+      navigate(tab === "loop" ? "/loops" : "/")
     } catch (error) {
-      setError(error?.message || "Upload failed");
+      setError(error?.message || "Upload failed")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+}
 
   return (
     <div className="max-w-xl mx-auto px-4 py-6">
