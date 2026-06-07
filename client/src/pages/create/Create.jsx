@@ -57,30 +57,37 @@ function Create() {
   // };
 
   const handleSubmit = async () => {
-    if (!file) return setError("Please select a media file")
-    setLoading(true)
-    setError("")
+    if (!file) return setError("Please select a media file");
+
+    if (file.size > 10 * 1024 * 1024) {
+      return setError(
+        "File too large. Maximum size is 10MB. Please choose a smaller file.",
+      );
+    }
+
+    setLoading(true);
+    setError("");
     try {
-      const formData = new FormData()
-      formData.append("mediaType", mediaType)  // ← text fields first ✅
-      if (caption) formData.append("caption", caption)
-      formData.append("media", file)           // ← file last ✅
+      const formData = new FormData();
+      formData.append("mediaType", mediaType);
+      if (caption) formData.append("caption", caption);
+      formData.append("media", file); // ← file last ✅
 
       if (tab === "post") {
-        await dispatch(uploadPost(formData)).unwrap()
+        await dispatch(uploadPost(formData)).unwrap();
       } else if (tab === "loop") {
-        await uploadLoopApi(formData)
+        await uploadLoopApi(formData);
       } else {
-        await uploadStoryApi(formData)
+        await uploadStoryApi(formData);
       }
 
-      navigate(tab === "loop" ? "/loops" : "/")
+      navigate(tab === "loop" ? "/loops" : "/");
     } catch (error) {
-      setError(error?.message || "Upload failed")
+      setError(error?.message || "Upload failed");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-}
+  };
 
   return (
     <div className="max-w-xl mx-auto px-4 py-6">
@@ -107,6 +114,10 @@ function Create() {
           </button>
         ))}
       </div>
+
+      <p className="text-white/20 text-xs">
+        JPG, PNG, MP4, MOV supported · Max 10MB
+      </p>
 
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl px-4 py-3 mb-4">
