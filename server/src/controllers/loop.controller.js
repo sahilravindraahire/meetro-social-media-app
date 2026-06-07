@@ -46,9 +46,59 @@ export const uploadLoop = asyncHandler(async(req, res) => {
     .json(new apiResponse(200, populatedLoop))
 })
 
+// export const like = asyncHandler(async(req, res) => {
+//     const loopId = req.params.loopId
+
+//     const loop = await Loop.findById(loopId)
+
+//     if(!loop){
+//         throw new apiError(400, "loop not found")
+//     }
+
+//     const alreadyLiked = loop.likes.some(
+//         (id) => id.toString() === req.user._id.toString()
+//     )
+
+//     if(alreadyLiked){
+//         loop.likes = loop.likes.filter((id) => id.toString() !== req.user._id.toString())
+//     }else{
+//         loop.likes.push(req.user._id)
+
+//         if(loop.author._id !== req.user._id){
+//             const notification = await Notification.create({
+//                 sender: req.user._id,
+//                 receiver: loop.author._id,
+//                 type: "like",
+//                 loop: loop._id,
+//                 message: "liked your loop"
+//             })
+
+//             const populatedNotification = await Notification.findById(notification._id)
+//             .populate("sender receiver loop")
+
+//             const receiverSocketId = getSocketId(loop.author._id)
+
+//             if(receiverSocketId){
+//                 io.to(receiverSocketId).emit("newNotification", populatedNotification)
+//             }
+//         }
+//     }
+
+//     await loop.save()
+
+//     await loop.populate("author", "name userName profileImage")
+//     io.emit("likedLoop", {
+//         loopId: loop._id,
+//         likes: loop.likes
+//     })
+
+//     return res
+//     .status(200)
+//     .json(new apiResponse(200, loop))
+// })
+
 export const like = asyncHandler(async(req, res) => {
     const loopId = req.params.loopId
-
     const loop = await Loop.findById(loopId)
 
     if(!loop){
@@ -59,12 +109,22 @@ export const like = asyncHandler(async(req, res) => {
         (id) => id.toString() === req.user._id.toString()
     )
 
-    if(alreadyLiked){
-        loop.likes = loop.likes.filter((id) => id.toString() !== req.user._id.toString())
-    }else{
-        loop.likes.push(req.user._id)
+    let updatedLoop
 
-        if(loop.author._id !== req.user._id){
+    if(alreadyLiked){
+        updatedLoop = await Loop.findByIdAndUpdate(
+            loopId,
+            { $pull: { likes: req.user._id } },
+            { new: true }
+        ).populate("author", "name userName profileImage")
+    } else {
+        updatedLoop = await Loop.findByIdAndUpdate(
+            loopId,
+            { $push: { likes: req.user._id } },
+            { new: true }
+        ).populate("author", "name userName profileImage")
+
+        if(loop.author._id.toString() !== req.user._id.toString()){
             const notification = await Notification.create({
                 sender: req.user._id,
                 receiver: loop.author._id,
@@ -77,24 +137,20 @@ export const like = asyncHandler(async(req, res) => {
             .populate("sender receiver loop")
 
             const receiverSocketId = getSocketId(loop.author._id)
-
             if(receiverSocketId){
                 io.to(receiverSocketId).emit("newNotification", populatedNotification)
             }
         }
     }
 
-    await loop.save()
-
-    await loop.populate("author", "name userName profileImage")
     io.emit("likedLoop", {
-        loopId: loop._id,
-        likes: loop.likes
+        loopId: updatedLoop._id,
+        likes: updatedLoop.likes
     })
 
     return res
     .status(200)
-    .json(new apiResponse(200, loop))
+    .json(new apiResponse(200, updatedLoop))
 })
 
 export const comment = asyncHandler(async(req, res) => {

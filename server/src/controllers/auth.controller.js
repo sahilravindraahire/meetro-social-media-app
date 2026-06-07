@@ -12,9 +12,9 @@ const generateToken = (id) => {
 
 const cookieOption = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 1*365*24*60*60*1000
+    maxAge: 1 * 365 * 24 * 60 * 60 * 1000
 }
 
 export const signUp = asyncHandler(async(req, res) => {
