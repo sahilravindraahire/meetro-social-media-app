@@ -1,17 +1,17 @@
 import dotenv from "dotenv"
 dotenv.config()
 
-import {connectDB} from "./db/dataBase.js"
+import {connectDB} from "./src/db/dataBase.js"
 import cors from "cors"
-import {app, server} from "./socket/socket.js"
+import {app, server} from "./src/socket/socket.js"
 import express, { urlencoded } from "express"
 import cookieParser from "cookie-parser"
-import authRoutes from "./routes/auth.route.js"
-import userRoutes from "./routes/user.route.js"
-import postRoutes from "./routes/post.route.js"
-import loopRoutes from "./routes/loop.route.js"
-import storyRoutes from "./routes/story.route.js"
-import messageRoutes from "./routes/message.route.js"
+import authRoutes from "./src/routes/auth.route.js"
+import userRoutes from "./src/routes/user.route.js"
+import postRoutes from "./src/routes/post.route.js"
+import loopRoutes from "./src/routes/loop.route.js"
+import storyRoutes from "./src/routes/story.route.js"
+import messageRoutes from "./src/routes/message.route.js"
 
 app.use(express.json())
 app.use(cookieParser())
