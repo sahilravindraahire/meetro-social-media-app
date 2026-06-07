@@ -13,6 +13,7 @@ export const uploadStory = asyncHandler(async(req, res) => {
         throw new apiError(400, "error while getting user")
     }
 
+
     if(user.story){
         const oldStory = await Story.findById(user.story)
 
@@ -31,7 +32,9 @@ export const uploadStory = asyncHandler(async(req, res) => {
         throw new apiError(400, "media is required")
     }
 
-    const uplaodResponse = await uploadOnCloudinary(req.file?.path)
+    const resourceType = mediaType === "video" ? "video" : "image"
+
+    const uplaodResponse = await uploadOnCloudinary(req.file?.path, resourceType)
 
     if(!uplaodResponse){
         throw new apiError(500, "failed to upload media")

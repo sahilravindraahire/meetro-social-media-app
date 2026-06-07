@@ -10,18 +10,31 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-export const uploadOnCloudinary = async(file) => {
+// export const uploadOnCloudinary = async(file) => {
+//     try {
+//         if(!file) return
+//         const response = await cloudinary.uploader.upload(file, {resource_type: "auto"})
+//         fs.unlinkSync(file)
+//         return response
+//     } catch (error) {
+//         console.log("Cloudinary error: ", error.message)
+
+//         if(fs.existsSync(file)){
+//             fs.unlinkSync(file)
+//         }
+//         return null
+//     }
+// }
+
+
+export const uploadOnCloudinary = async (localFilePath, resourceType = "image") => {
     try {
-        if(!file) return
-        const response = await cloudinary.uploader.upload(file, {resource_type: "auto"})
-        fs.unlinkSync(file)
+        if(!localFilePath) return null
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            resource_type: resourceType
+        })
         return response
     } catch (error) {
-        console.log("Cloudinary error: ", error.message)
-
-        if(fs.existsSync(file)){
-            fs.unlinkSync(file)
-        }
         return null
     }
 }
