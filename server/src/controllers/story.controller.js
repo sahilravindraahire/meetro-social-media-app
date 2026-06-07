@@ -49,7 +49,7 @@ export const uploadStory = asyncHandler(async(req, res) => {
 
     user.story = story._id
 
-    await story.save()
+    await user.save()
 
     const populatedStory = await Story.findById(story._id)
     .populate("author", "name userName profileImage")
