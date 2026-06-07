@@ -148,6 +148,7 @@ export const comment = asyncHandler(async(req, res) => {
 export const getAllLoops = asyncHandler(async(req, res) => {
     const loops = await Loop.find({})
     .populate("author", "name userName profileImage")
+    .populate("comments.author", "name userName profileImage")
 
     if(!loops){
         throw new apiError(400, "error while fetching loops")
