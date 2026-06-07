@@ -113,7 +113,12 @@ export const sendOtp = asyncHandler(async(req, res) => {
     user.isOtpVerified = false
 
     await user.save()
-    await sendEmail(email, otp)
+    try {
+        await sendEmail(email, otp)
+    } catch (error) {
+        console.log("Email error:", error.message)
+        throw new apiError(500, "Failed to send OTP email. Check email configuration.")
+    }
 
     return res
     .status(200)
