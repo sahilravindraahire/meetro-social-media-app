@@ -48,7 +48,7 @@ export const sendEmail = async (to, otp) => {
             from: `meetroo Support <${process.env.EMAIL_USER}>`,
             to: to,
             subject: `OTP for new password`,
-            html: `
+            text: `
             <h2>Welcome to MEETRO!</h2>
             <p>Your OTP for password reset :</p>
             <h1 style="letter-spacing: 4px">${otp}</h1>
