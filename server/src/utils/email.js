@@ -58,6 +58,6 @@ export const sendEmail = async (email, otp) => {
 
         await transporter.sendMail(mailOptions)
     } catch (error) {
-        console.error(`Failed to send email to ${to}: ${error.message}`)
+        console.error(`Failed to send email to ${email}: ${error.message}`)
     }
 }
