@@ -5,7 +5,7 @@ import nodemailer from "nodemailer"
 
 
 const transporter = nodemailer.createTransport({
-    service: "Gmail",
+    service: "gmail",
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -14,9 +14,6 @@ const transporter = nodemailer.createTransport({
 
 
 export const sendEmail = async(to, otp) => {
-    console.log("Attempting to send email to:", to)
-    console.log("EMAIL_USER:", process.env.EMAIL_USER)
-    console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS)
     
     try {
         await transporter.sendMail({
