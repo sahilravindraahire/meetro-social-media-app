@@ -34,7 +34,7 @@ import nodemailer from "nodemailer"
 //     }
 // }
 
-export const sendEmail = async (to, otp) => {
+export const sendEmail = async (email, otp) => {
     try {
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -46,7 +46,7 @@ export const sendEmail = async (to, otp) => {
 
         const mailOptions = {
             from: `meetroo Support <${process.env.EMAIL_USER}>`,
-            to: to,
+            to: email,
             subject: `OTP for new password`,
             text: `
             <h2>Welcome to MEETRO!</h2>
